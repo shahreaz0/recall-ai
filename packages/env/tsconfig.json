@@ -1,0 +1,3 @@
+{
+  "extends": "@recall-ai/config/tsconfig.base.json"
+}

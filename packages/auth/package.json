@@ -1,0 +1,24 @@
+{
+  "name": "@recall-ai/auth",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "default": "./src/*.ts"
+    }
+  },
+  "scripts": {},
+  "dependencies": {
+    "@recall-ai/db": "workspace:*",
+    "@recall-ai/env": "workspace:*",
+    "better-auth": "catalog:",
+    "dotenv": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@recall-ai/config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}
