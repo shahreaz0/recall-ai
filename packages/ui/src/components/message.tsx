@@ -1,5 +1,6 @@
-import { cn } from "@recall-ai/ui/lib/utils";
 import * as React from "react";
+
+import { cn } from "@recall-ai/ui/lib/utils";
 
 function MessageGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
