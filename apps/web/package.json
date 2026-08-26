@@ -9,6 +9,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@ai-sdk/react": "^4.0.82",
     "@recall-ai/auth": "workspace:*",
     "@recall-ai/env": "workspace:*",
     "@recall-ai/ui": "workspace:*",
