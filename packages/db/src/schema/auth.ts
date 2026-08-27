@@ -1,75 +1,81 @@
 import { defineRelations } from "drizzle-orm";
-import { pgTable, text, timestamp, boolean, index } from "drizzle-orm/pg-core";
+import { index, snakeCase } from "drizzle-orm/pg-core";
 
-export const user = pgTable("user", {
-  id: text("id").primaryKey(),
-  name: text("name").notNull(),
-  email: text("email").notNull().unique(),
-  emailVerified: boolean("email_verified").default(false).notNull(),
-  image: text("image"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at")
+export const user = snakeCase.table("user", (c) => ({
+  id: c.text().primaryKey(),
+  name: c.text().notNull(),
+  email: c.text().notNull().unique(),
+  emailVerified: c.boolean().default(false).notNull(),
+  image: c.text(),
+  createdAt: c.timestamp().defaultNow().notNull(),
+  updatedAt: c
+    .timestamp()
     .defaultNow()
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
-});
+}));
 
-export const session = pgTable(
+export const session = snakeCase.table(
   "session",
-  {
-    id: text("id").primaryKey(),
-    expiresAt: timestamp("expires_at").notNull(),
-    token: text("token").notNull().unique(),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at")
+  (c) => ({
+    id: c.text().primaryKey(),
+    expiresAt: c.timestamp().notNull(),
+    token: c.text().notNull().unique(),
+    createdAt: c.timestamp().defaultNow().notNull(),
+    updatedAt: c
+      .timestamp()
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
-    ipAddress: text("ip_address"),
-    userAgent: text("user_agent"),
-    userId: text("user_id")
-      .notNull()
-      .references(() => user.id, { onDelete: "cascade" }),
-  },
+    ipAddress: c.text(),
+    userAgent: c.text(),
+    userId: c
+      .text()
+      .references(() => user.id, { onDelete: "cascade" })
+      .notNull(),
+  }),
   (table) => [index("session_userId_idx").on(table.userId)],
 );
 
-export const account = pgTable(
+export const account = snakeCase.table(
   "account",
-  {
-    id: text("id").primaryKey(),
-    accountId: text("account_id").notNull(),
-    providerId: text("provider_id").notNull(),
-    userId: text("user_id")
-      .notNull()
-      .references(() => user.id, { onDelete: "cascade" }),
-    accessToken: text("access_token"),
-    refreshToken: text("refresh_token"),
-    idToken: text("id_token"),
-    accessTokenExpiresAt: timestamp("access_token_expires_at"),
-    refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
-    scope: text("scope"),
-    password: text("password"),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at")
+  (c) => ({
+    id: c.text().primaryKey(),
+    accountId: c.text().notNull(),
+    providerId: c.text().notNull(),
+    userId: c
+      .text()
+      .references(() => user.id, { onDelete: "cascade" })
+      .notNull(),
+    accessToken: c.text(),
+    refreshToken: c.text(),
+    idToken: c.text(),
+    accessTokenExpiresAt: c.timestamp(),
+    refreshTokenExpiresAt: c.timestamp(),
+    scope: c.text(),
+    password: c.text(),
+    createdAt: c.timestamp().defaultNow().notNull(),
+    updatedAt: c
+      .timestamp()
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
-  },
+  }),
   (table) => [index("account_userId_idx").on(table.userId)],
 );
 
-export const verification = pgTable(
+export const verification = snakeCase.table(
   "verification",
-  {
-    id: text("id").primaryKey(),
-    identifier: text("identifier").notNull(),
-    value: text("value").notNull(),
-    expiresAt: timestamp("expires_at").notNull(),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at")
+  (c) => ({
+    id: c.text().primaryKey(),
+    identifier: c.text().notNull(),
+    value: c.text().notNull(),
+    expiresAt: c.timestamp().notNull(),
+    createdAt: c.timestamp().defaultNow().notNull(),
+    updatedAt: c
+      .timestamp()
       .defaultNow()
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
-  },
+  }),
   (table) => [index("verification_identifier_idx").on(table.identifier)],
 );
 

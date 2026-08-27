@@ -1,0 +1,1 @@
+ALTER TABLE "documentChunks" RENAME TO "document_chunks";
