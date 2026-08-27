@@ -106,6 +106,9 @@ importers:
       '@recall-ai/auth':
         specifier: workspace:*
         version: link:../../packages/auth
+      '@recall-ai/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@recall-ai/env':
         specifier: workspace:*
         version: link:../../packages/env

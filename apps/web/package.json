@@ -12,6 +12,7 @@
     "@ai-sdk/react": "^4.0.82",
     "@openrouter/ai-sdk-provider": "^3.0.0",
     "@recall-ai/auth": "workspace:*",
+    "@recall-ai/db": "workspace:*",
     "@recall-ai/env": "workspace:*",
     "@recall-ai/ui": "workspace:*",
     "@swc/helpers": "^0.5.23",
