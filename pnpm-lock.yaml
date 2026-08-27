@@ -96,6 +96,9 @@ importers:
       '@ai-sdk/react':
         specifier: ^4.0.82
         version: 4.0.82(react@19.2.8)(zod@4.4.3)
+      '@openrouter/ai-sdk-provider':
+        specifier: ^3.0.0
+        version: 3.0.0(ai@7.0.79(zod@4.4.3))(zod@4.4.3)
       '@recall-ai/auth':
         specifier: workspace:*
         version: link:../../packages/auth
@@ -111,6 +114,9 @@ importers:
       '@tanstack/react-form':
         specifier: ^1.33.2
         version: 1.33.5(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      ai:
+        specifier: ^7.0.79
+        version: 7.0.79(zod@4.4.3)
       babel-plugin-react-compiler:
         specifier: ^1.0.0
         version: 1.0.0
@@ -1676,6 +1682,13 @@ packages:
   '@nodelib/fs.walk@1.2.8':
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
+
+  '@openrouter/ai-sdk-provider@3.0.0':
+    resolution: {integrity: sha512-m9XTSWoODH2RM5OsZpaGiN7QRR8cdP5paBWq699Tu3JVmGPBKT8xF8XwV0ZBVVsjikD/JgWfak4VSsTR4wAVbg==}
+    engines: {node: '>=22'}
+    peerDependencies:
+      ai: ^7.0.0
+      zod: ^3.25.76 || ^4.1.8
 
   '@opentelemetry/semantic-conventions@1.43.0':
     resolution: {integrity: sha512-eSYWTm620tTk45EKSedaUL8MFYI8hW164hIXsgIHyxu3VobUB3fFCu5t0hQby6OoWRPsG1KkKUG2M5UadiLiVg==}
@@ -6929,6 +6942,11 @@ snapshots:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.20.1
+
+  '@openrouter/ai-sdk-provider@3.0.0(ai@7.0.79(zod@4.4.3))(zod@4.4.3)':
+    dependencies:
+      ai: 7.0.79(zod@4.4.3)
+      zod: 4.4.3
 
   '@opentelemetry/semantic-conventions@1.43.0': {}
 
