@@ -42,9 +42,11 @@
     "vercel": "^58.1.0"
   },
   "lint-staged": {
+    "*.{js,jsx,ts,tsx,mjs,cjs}": [
+      "oxlint --no-error-on-unmatched-pattern"
+    ],
     "*": [
-      "oxlint",
-      "oxfmt --write"
+      "oxfmt --no-error-on-unmatched-pattern --write"
     ]
   },
   "packageManager": "pnpm@10.29.2",
