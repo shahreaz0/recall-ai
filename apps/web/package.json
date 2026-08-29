@@ -11,6 +11,7 @@
   "dependencies": {
     "@ai-sdk/react": "^4.0.82",
     "@hookform/resolvers": "^3.10.0",
+    "@langchain/textsplitters": "^1.0.1",
     "@openrouter/ai-sdk-provider": "^3.0.0",
     "@recall-ai/auth": "workspace:*",
     "@recall-ai/db": "workspace:*",
@@ -29,6 +30,7 @@
     "react-dom": "catalog:",
     "react-hook-form": "^7.54.2",
     "sonner": "catalog:",
+    "unpdf": "^0.12.1",
     "zod": "catalog:"
   },
   "devDependencies": {

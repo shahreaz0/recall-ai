@@ -1,23 +1,10 @@
-import { Button } from "@recall-ai/ui/components/button";
-
-import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemDescription,
-  ItemMedia,
-  ItemTitle,
-} from "@recall-ai/ui/components/item";
-import { EllipsisIcon, FileIcon, SearchIcon, TrashIcon } from "lucide-react";
+import { EllipsisIcon, SearchIcon } from "lucide-react";
 
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@recall-ai/ui/components/input-group";
 
 import { AddDocumentDialog } from "./add-document-dialog";
-
-const INITIAL_DOCUMENTS = [
-  { id: 1, title: "Document 1", description: "Description 1" },
-  { id: 2, title: "Document 2", description: "Description 2" },
-];
+import { DecumentListSkeleton, DocumentList } from "./document-list";
+import { Suspense } from "react";
 
 export default function ChatSidebar() {
   return (
@@ -44,22 +31,9 @@ export default function ChatSidebar() {
         <EllipsisIcon size={16} className="cursor-pointer" />
       </div>
 
-      {INITIAL_DOCUMENTS.map((doc) => (
-        <Item key={doc.id} variant="muted" className="mt-2">
-          <ItemMedia variant="icon">
-            <FileIcon />
-          </ItemMedia>
-          <ItemContent>
-            <ItemTitle>{doc.title}</ItemTitle>
-            <ItemDescription>{doc.description}</ItemDescription>
-          </ItemContent>
-          <ItemActions>
-            <Button variant="outline" size="icon-xs">
-              <TrashIcon size={16} />
-            </Button>
-          </ItemActions>
-        </Item>
-      ))}
+      <Suspense fallback={<DecumentListSkeleton />}>
+        <DocumentList />
+      </Suspense>
     </aside>
   );
 }

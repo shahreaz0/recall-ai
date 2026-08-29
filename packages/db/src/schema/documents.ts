@@ -1,9 +1,13 @@
 import { index, snakeCase } from "drizzle-orm/pg-core";
 import { user } from "./auth";
 import { defineRelations } from "drizzle-orm";
+import { createId } from "@paralleldrive/cuid2";
 
 export const documents = snakeCase.table("documents", (c) => ({
-  id: c.text().primaryKey(),
+  id: c
+    .text()
+    .primaryKey()
+    .$defaultFn(() => createId()),
   title: c.text().notNull(),
   description: c.text(),
   mimeType: c.text().default("application/pdf"),
@@ -22,7 +26,10 @@ export const documents = snakeCase.table("documents", (c) => ({
 export const documentChunks = snakeCase.table(
   "document_chunks",
   (c) => ({
-    id: c.text().primaryKey(),
+    id: c
+      .text()
+      .primaryKey()
+      .$defaultFn(() => createId()),
     content: c.text().notNull(),
     embedding: c.vector({ dimensions: 1024 }),
     documentId: c

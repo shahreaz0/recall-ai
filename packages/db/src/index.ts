@@ -1,16 +1,21 @@
-import { neon } from "@neondatabase/serverless";
+import { Pool, neonConfig } from "@neondatabase/serverless";
 import { env } from "@recall-ai/env/server";
 import { defineRelations } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/neon-http";
+import { drizzle } from "drizzle-orm/neon-serverless";
 import * as schema from "./schema";
+
+if (typeof globalThis.WebSocket !== "undefined") {
+  neonConfig.webSocketConstructor = globalThis.WebSocket;
+}
 
 export const relations = defineRelations(schema);
 
 export function createDb() {
-  const sql = neon(env.DATABASE_URL);
+  const pool = new Pool({ connectionString: env.DATABASE_URL });
 
-  return drizzle({ client: sql, relations });
+  return drizzle({ client: pool, relations });
 }
 
 export const db = createDb();
 export * from "./schema";
+export * from "drizzle-orm";

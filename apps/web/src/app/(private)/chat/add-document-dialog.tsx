@@ -19,7 +19,7 @@ type AddDocumentDialogProps = {
   trigger?: React.ReactNode;
 };
 
-export function AddDocumentDialog({ onDocumentAdded, trigger }: AddDocumentDialogProps) {
+export function AddDocumentDialog({ trigger }: AddDocumentDialogProps) {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -45,8 +45,7 @@ export function AddDocumentDialog({ onDocumentAdded, trigger }: AddDocumentDialo
         </DialogHeader>
 
         <AddDocumentForm
-          onSuccess={(data) => {
-            onDocumentAdded?.(data);
+          onSuccess={() => {
             setOpen(false);
           }}
           onCancel={() => setOpen(false)}

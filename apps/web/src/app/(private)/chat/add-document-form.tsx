@@ -21,6 +21,7 @@ import {
   AttachmentMedia,
   AttachmentTitle,
 } from "@recall-ai/ui/components/attachment";
+import { createDocument } from "./_chat-actions";
 
 const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25MB
 
@@ -74,6 +75,13 @@ export function AddDocumentForm({ onSuccess, onCancel, className }: AddDocumentF
 
   async function handleSubmit(data: DocumentFormValues) {
     try {
+      const res = await createDocument(data);
+
+      if (!res.success) {
+        toast.error(res.error);
+        return;
+      }
+
       toast.success(`Document "${data.title}" added successfully.`);
       onSuccess?.(data);
       form.reset();
@@ -146,13 +154,13 @@ export function AddDocumentForm({ onSuccess, onCancel, className }: AddDocumentF
                 <div>
                   <p className="text-xs font-medium">Click to upload or drag and drop</p>
                   <p className="text-[11px] text-muted-foreground mt-0.5">
-                    PDF, TXT, DOCX, MD (up to 25MB)
+                    Only PDF files are supported (up to 25MB)
                   </p>
                 </div>
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept=".pdf,.txt,.docx,.doc,.md"
+                  accept=".pdf"
                   className="hidden"
                   onChange={(e) => {
                     const selectedFile = e.target.files?.[0];
@@ -198,7 +206,7 @@ export function AddDocumentForm({ onSuccess, onCancel, className }: AddDocumentF
               id={field.name}
               aria-invalid={fieldState.invalid}
               placeholder="Brief summary or notes about this document..."
-              className="min-h-[80px]"
+              className="min-h-20"
             />
             <FieldDescription>
               Optional description to help identify this document.
