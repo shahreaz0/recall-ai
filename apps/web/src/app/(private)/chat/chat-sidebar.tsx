@@ -12,7 +12,9 @@ import { EllipsisIcon, FileIcon, SearchIcon, TrashIcon } from "lucide-react";
 
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@recall-ai/ui/components/input-group";
 
-const DOCUMENTS = [
+import { AddDocumentDialog } from "./add-document-dialog";
+
+const INITIAL_DOCUMENTS = [
   { id: 1, title: "Document 1", description: "Description 1" },
   { id: 2, title: "Document 2", description: "Description 2" },
 ];
@@ -26,7 +28,7 @@ export default function ChatSidebar() {
           <p className="text-muted-foreground text-xs">4 files | 3mb indexed</p>
         </div>
 
-        <Button className="w-full">Add Documents</Button>
+        <AddDocumentDialog />
 
         <InputGroup className="w-full">
           <InputGroupInput placeholder="Search documents..." />
@@ -42,7 +44,7 @@ export default function ChatSidebar() {
         <EllipsisIcon size={16} className="cursor-pointer" />
       </div>
 
-      {DOCUMENTS.map((doc) => (
+      {INITIAL_DOCUMENTS.map((doc) => (
         <Item key={doc.id} variant="muted" className="mt-2">
           <ItemMedia variant="icon">
             <FileIcon />

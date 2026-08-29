@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@ai-sdk/react": "^4.0.82",
+    "@hookform/resolvers": "^3.10.0",
     "@openrouter/ai-sdk-provider": "^3.0.0",
     "@recall-ai/auth": "workspace:*",
     "@recall-ai/db": "workspace:*",
@@ -26,6 +27,7 @@
     "next-themes": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
+    "react-hook-form": "^7.54.2",
     "sonner": "catalog:",
     "zod": "catalog:"
   },

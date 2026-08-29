@@ -100,6 +100,9 @@ importers:
       '@ai-sdk/react':
         specifier: ^4.0.82
         version: 4.0.82(react@19.2.8)(zod@4.4.3)
+      '@hookform/resolvers':
+        specifier: ^3.10.0
+        version: 3.10.0(react-hook-form@7.86.0(react@19.2.8))
       '@openrouter/ai-sdk-provider':
         specifier: ^3.0.0
         version: 3.0.0(ai@7.0.79(zod@4.4.3))(zod@4.4.3)
@@ -148,6 +151,9 @@ importers:
       react-dom:
         specifier: 'catalog:'
         version: 19.2.8(react@19.2.8)
+      react-hook-form:
+        specifier: ^7.54.2
+        version: 7.86.0(react@19.2.8)
       sonner:
         specifier: 'catalog:'
         version: 2.0.8(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -1161,6 +1167,11 @@ packages:
     engines: {node: '>=20'}
     peerDependencies:
       hono: ^4
+
+  '@hookform/resolvers@3.10.0':
+    resolution: {integrity: sha512-79Dv+3mDF7i+2ajj7SkypSKHhl1cbln1OGavqrsF7p6mbUv11xpqpacPsGDCTRvCSjEEIez2ef1NveSVL3b0Ag==}
+    peerDependencies:
+      react-hook-form: ^7.0.0
 
   '@iconify/types@2.0.0':
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
@@ -4945,6 +4956,12 @@ packages:
     peerDependencies:
       react: ^19.2.8
 
+  react-hook-form@7.86.0:
+    resolution: {integrity: sha512-4kbWJrh5jPZt1+YqVcXcGKffGcXV/XVbozknLh0Yjh0KhpoAkus21TAQhzRYqNwFkkObmnSvRlZZ3GT+ehoIrA==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18 || ^19
+
   react-remove-scroll-bar@2.3.8:
     resolution: {integrity: sha512-9r+yi9+mgU33AKcj6IbT9oRCO78WriSj6t/cF8DWBZJ9aOGPOTEDvdUDz1FwKim7QXWwmHqtdHnRJfhAxEG46Q==}
     engines: {node: '>=10'}
@@ -6329,6 +6346,10 @@ snapshots:
   '@hono/node-server@2.1.1(hono@4.13.3)':
     dependencies:
       hono: 4.13.3
+
+  '@hookform/resolvers@3.10.0(react-hook-form@7.86.0(react@19.2.8))':
+    dependencies:
+      react-hook-form: 7.86.0(react@19.2.8)
 
   '@iconify/types@2.0.0': {}
 
@@ -10055,6 +10076,10 @@ snapshots:
     dependencies:
       react: 19.2.8
       scheduler: 0.27.0
+
+  react-hook-form@7.86.0(react@19.2.8):
+    dependencies:
+      react: 19.2.8
 
   react-remove-scroll-bar@2.3.8(@types/react@19.2.18)(react@19.2.8):
     dependencies:
