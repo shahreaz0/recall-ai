@@ -1,12 +1,15 @@
-import { EllipsisIcon, SearchIcon } from "lucide-react";
-
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@recall-ai/ui/components/input-group";
+import { EllipsisIcon } from "lucide-react";
 
 import { AddDocumentDialog } from "./add-document-dialog";
 import { DecumentListSkeleton, DocumentList } from "./document-list";
 import { Suspense } from "react";
+import { SearchDocumentInput } from "./search-document-input";
 
-export default function ChatSidebar() {
+type Props = {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export default function ChatSidebar(props: Props) {
   return (
     <aside className="w-80 h-80 md:h-full p-4">
       <div className="space-y-4">
@@ -17,12 +20,7 @@ export default function ChatSidebar() {
 
         <AddDocumentDialog />
 
-        <InputGroup className="w-full">
-          <InputGroupInput placeholder="Search documents..." />
-          <InputGroupAddon>
-            <SearchIcon />
-          </InputGroupAddon>
-        </InputGroup>
+        <SearchDocumentInput />
       </div>
 
       <div className="my-4 flex items-center justify-between">
@@ -32,7 +30,11 @@ export default function ChatSidebar() {
       </div>
 
       <Suspense fallback={<DecumentListSkeleton />}>
-        <DocumentList />
+        {props.searchParams.then((res) => {
+          const query = res.query as string | undefined;
+
+          return <DocumentList query={query} />;
+        })}
       </Suspense>
     </aside>
   );

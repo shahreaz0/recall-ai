@@ -103,17 +103,20 @@ export async function deleteDocument(documentId: string) {
   }
 }
 
-export async function getDocumentList() {
+export async function getDocumentList({ query }: { query?: string }) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user) {
     return { error: "Unauthorized", success: false, documents: [] };
   }
 
-  const documents = await db.query.documents.findMany({
+  const docs = await db.query.documents.findMany({
     where: {
       userId: session.user.id,
+      title: {
+        ilike: query ? `%${query}%` : "%",
+      },
     },
   });
 
-  return { success: true, documents };
+  return { success: true, documents: docs };
 }

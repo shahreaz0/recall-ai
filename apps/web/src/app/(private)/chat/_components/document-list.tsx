@@ -9,11 +9,15 @@ import {
   ItemTitle,
 } from "@recall-ai/ui/components/item";
 import { Skeleton } from "@recall-ai/ui/components/skeleton";
-import { getDocumentList } from "./_chat-actions";
+import { getDocumentList } from "../_chat-actions";
 import { DeleteDocumentButton } from "./delete-document-button";
 
-export async function DocumentList() {
-  const { documents } = await getDocumentList();
+type Props = {
+  query?: string | undefined;
+};
+
+export async function DocumentList(props: Props) {
+  const { documents } = await getDocumentList({ query: props.query });
 
   if (!documents || documents.length === 0) {
     return (

@@ -1,11 +1,11 @@
-import { Chat } from "./chat-prompt-input";
+import { Chat } from "./_components/chat";
 
-import ChatSidebar from "./chat-sidebar";
+import ChatSidebar from "./_components/chat-sidebar";
 
-export default function ChatPage() {
+export default function ChatPage(props: PageProps<"/chat">) {
   return (
     <section className="flex flex-col md:flex-row">
-      <ChatSidebar />
+      <ChatSidebar searchParams={props.searchParams} />
 
       <main className="border-t md:border-t-0 md:border-l flex-3">
         <Chat />
