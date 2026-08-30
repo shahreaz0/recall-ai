@@ -1,12 +1,22 @@
 "use server";
-import { generateEmbeddings } from "@/lib/embeddings";
+import { generateEmbedding, generateEmbeddings } from "@/lib/embeddings";
 
 import { splitText } from "@/lib/chunking";
 import { auth } from "@recall-ai/auth";
 import { headers } from "next/headers";
 
 import { extractText } from "unpdf";
-import { and, db, documentChunks, documents, eq } from "@recall-ai/db";
+import {
+  and,
+  cosineDistance,
+  db,
+  desc,
+  documentChunks,
+  documents,
+  eq,
+  gt,
+  sql,
+} from "@recall-ai/db";
 import { revalidatePath } from "next/cache";
 
 type CreateDocumentValues = {
@@ -119,4 +129,60 @@ export async function getDocumentList({ query }: { query?: string }) {
   });
 
   return { success: true, documents: docs };
+}
+
+export async function semanticSearchDocument({
+  query,
+  limit = 5,
+  threshold = 0.3,
+}: {
+  query: string;
+  limit?: number;
+  threshold?: number;
+}) {
+  try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (!session?.user) {
+      return { error: "Unauthorized", success: false, documents: [] };
+    }
+
+    const embedding = await generateEmbedding(query);
+
+    console.log(embedding);
+
+    const similarity = sql<number>`1 - (${cosineDistance(documentChunks.embedding, embedding)})`;
+
+    const similarDocs = await db
+      .select({
+        content: documentChunks.content,
+        documentId: documentChunks.documentId,
+        chunkIndex: documentChunks.chunkIndex,
+        similarity,
+      })
+      .from(documentChunks)
+      .where(gt(similarity, threshold))
+      .orderBy((t) => desc(t.similarity))
+      .limit(limit);
+
+    console.log(similarDocs);
+
+    // const docs = await db.query.documentChunks.findMany({
+    //   where: {
+    //     embedding: { l2Distance: { lte: threshold } },
+    //     documentId: { in: session.user.id },
+    //   },
+    //   limit,
+    // });
+
+    return {
+      success: true,
+      documents: similarDocs,
+    };
+  } catch (error) {
+    return {
+      error: (error as Error).message,
+      success: false,
+      documents: [],
+    };
+  }
 }
