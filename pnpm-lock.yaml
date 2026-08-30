@@ -100,6 +100,9 @@ importers:
       '@ai-sdk/react':
         specifier: ^4.0.82
         version: 4.0.82(react@19.2.8)(zod@4.4.3)
+      '@exalabs/ai-sdk':
+        specifier: ^2.1.0
+        version: 2.1.0(ai@7.0.79(zod@4.4.3))
       '@hookform/resolvers':
         specifier: ^3.10.0
         version: 3.10.0(react-hook-form@7.86.0(react@19.2.8))
@@ -1154,6 +1157,11 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@exalabs/ai-sdk@2.1.0':
+    resolution: {integrity: sha512-Uf+j/ieZ8mPPIxELcBpeS8dbYt58pWBcwic3mdbZK1+f96daDX8zNAauHmfZLWo7ZcHpdofiXKPfmc56m5isGg==}
+    peerDependencies:
+      ai: ^6.0.0
 
   '@fastify/busboy@2.1.1':
     resolution: {integrity: sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==}
@@ -6552,6 +6560,11 @@ snapshots:
 
   '@esbuild/win32-x64@0.28.2':
     optional: true
+
+  '@exalabs/ai-sdk@2.1.0(ai@7.0.79(zod@4.4.3))':
+    dependencies:
+      ai: 7.0.79(zod@4.4.3)
+      zod: 3.25.76
 
   '@fastify/busboy@2.1.1': {}
 

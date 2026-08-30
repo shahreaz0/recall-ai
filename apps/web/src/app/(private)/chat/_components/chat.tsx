@@ -8,11 +8,11 @@ import {
 } from "@recall-ai/ui/components/ai-elements/attachments";
 import {
   PromptInput,
-  PromptInputActionAddAttachments,
-  PromptInputActionAddScreenshot,
-  PromptInputActionMenu,
-  PromptInputActionMenuContent,
-  PromptInputActionMenuTrigger,
+  // PromptInputActionAddAttachments,
+  // PromptInputActionAddScreenshot,
+  // PromptInputActionMenu,
+  // PromptInputActionMenuContent,
+  // PromptInputActionMenuTrigger,
   PromptInputBody,
   PromptInputButton,
   PromptInputHeader,
@@ -66,8 +66,8 @@ const PromptInputAttachmentsDisplay = () => {
 };
 
 const models = [
-  { id: "gpt-4o", name: "GPT-4o" },
-  { id: "claude-opus-4-20250514", name: "Claude 4 Opus" },
+  { id: "inclusionai/ling-3.0-flash-fin:free", name: "Ling 3.0 Flash Fin" },
+  { id: "z-ai/glm-5.2:free", name: "GLM 5.2" },
 ];
 
 export function Chat() {
@@ -101,9 +101,9 @@ export function Chat() {
   };
 
   return (
-    <div className="max-w-3xl p-4 size-full mx-auto">
+    <div className="max-w-3xl size-full mx-auto">
       <div className="flex flex-col h-full">
-        <Conversation>
+        <Conversation className="max-h-[calc(100dvh-200px)]">
           <ConversationContent>
             {messages.map((message) => (
               <Message from={message.role} key={message.id}>
@@ -134,13 +134,13 @@ export function Chat() {
           </PromptInputBody>
           <PromptInputFooter>
             <PromptInputTools>
-              <PromptInputActionMenu>
+              {/* <PromptInputActionMenu>
                 <PromptInputActionMenuTrigger />
                 <PromptInputActionMenuContent className="w-max">
                   <PromptInputActionAddAttachments />
                   <PromptInputActionAddScreenshot />
                 </PromptInputActionMenuContent>
-              </PromptInputActionMenu>
+              </PromptInputActionMenu> */}
               <PromptInputButton
                 onClick={() => setUseWebSearch(!useWebSearch)}
                 tooltip={{ content: "Search the web", shortcut: "⌘K" }}
