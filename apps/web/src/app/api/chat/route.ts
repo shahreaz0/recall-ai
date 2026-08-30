@@ -5,6 +5,7 @@ import { env } from "@recall-ai/env/server";
 import {
   convertToModelMessages,
   createUIMessageStreamResponse,
+  stepCountIs,
   streamText,
   toUIMessageStream,
   type UIMessage,
@@ -23,6 +24,7 @@ export async function POST(request: Request) {
     model: openrouter.chat(model),
     messages: formettedMessages,
     tools,
+    stopWhen: stepCountIs(3),
   });
 
   return createUIMessageStreamResponse({
