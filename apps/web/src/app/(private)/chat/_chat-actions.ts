@@ -160,7 +160,8 @@ export async function semanticSearchDocument({
         similarity,
       })
       .from(documentChunks)
-      .where(gt(similarity, threshold))
+      .innerJoin(documents, eq(documentChunks.documentId, documents.id))
+      .where(and(eq(documents.userId, session.user.id), gt(similarity, threshold)))
       .orderBy((t) => desc(t.similarity))
       .limit(limit);
 
