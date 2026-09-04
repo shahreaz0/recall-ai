@@ -4,7 +4,10 @@ import { createId } from "@paralleldrive/cuid2";
 import { defineRelations } from "drizzle-orm";
 
 export const conversations = snakeCase.table("conversations", (c) => ({
-  id: c.text().primaryKey(),
+  id: c
+    .text()
+    .primaryKey()
+    .$defaultFn(() => createId()),
   userId: c
     .text()
     .references(() => user.id)

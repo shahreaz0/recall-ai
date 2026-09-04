@@ -9,7 +9,7 @@ type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
-export default function ChatSidebar(props: Props) {
+export function DocumentsManager(props: Props) {
   return (
     <aside className="w-80 h-80 md:h-full p-4">
       <div className="space-y-4">
