@@ -1,7 +1,12 @@
 "use client";
 
 import { Loader2, SearchIcon, XIcon } from "lucide-react";
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@recall-ai/ui/components/input-group";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@recall-ai/ui/components/input-group";
 import { useEffect, useState, useTransition } from "react";
 import { useDebounce } from "@recall-ai/ui/hooks/use-debounce";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -35,27 +40,31 @@ export function SearchConversationInput() {
 
   return (
     <InputGroup className="w-full">
+      <InputGroupAddon align="inline-start">
+        <SearchIcon className="size-4 text-muted-foreground" />
+      </InputGroupAddon>
       <InputGroupInput
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search conversations..."
       />
-      <InputGroupAddon>
-        {isPending ? (
-          <Loader2 className="size-4 animate-spin text-muted-foreground" />
-        ) : query ? (
-          <button
-            type="button"
-            onClick={() => setQuery("")}
-            className="text-muted-foreground hover:text-foreground cursor-pointer"
-            title="Clear search"
-          >
-            <XIcon className="size-3.5" />
-          </button>
-        ) : (
-          <SearchIcon className="size-4 text-muted-foreground" />
-        )}
-      </InputGroupAddon>
+      {(isPending || query) && (
+        <InputGroupAddon align="inline-end">
+          {isPending ? (
+            <Loader2 className="size-3.5 animate-spin text-muted-foreground" />
+          ) : (
+            <InputGroupButton
+              size="icon-xs"
+              variant="ghost"
+              onClick={() => setQuery("")}
+              title="Clear search"
+              className="text-muted-foreground hover:text-foreground"
+            >
+              <XIcon className="size-3.5" />
+            </InputGroupButton>
+          )}
+        </InputGroupAddon>
+      )}
     </InputGroup>
   );
 }

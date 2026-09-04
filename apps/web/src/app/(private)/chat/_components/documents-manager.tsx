@@ -1,21 +1,24 @@
-import { EllipsisIcon } from "lucide-react";
+import { Suspense } from "react";
+import { FilesIcon } from "lucide-react";
 
 import { AddDocumentDialog } from "./add-document-dialog";
-import { DecumentListSkeleton, DocumentList } from "./document-list";
-import { Suspense } from "react";
+import { DocumentList, DocumentListSkeleton } from "./document-list";
 import { SearchDocumentInput } from "./search-document-input";
 
 type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
-export function DocumentsManager(props: Props) {
+export async function DocumentsManager(props: Props) {
+  const searchParams = await props.searchParams;
+  const query = typeof searchParams.query === "string" ? searchParams.query : undefined;
+
   return (
-    <aside className="w-80 h-80 md:h-full p-4">
+    <aside className="w-80 h-80 md:h-full p-4 flex flex-col shrink-0">
       <div className="space-y-4">
         <div>
-          <p className="text-xl">Your Resource</p>
-          <p className="text-muted-foreground text-xs">4 files | 3mb indexed</p>
+          <p className="text-xl">Your Resources</p>
+          <p className="text-muted-foreground text-xs">Indexed knowledge & documents</p>
         </div>
 
         <AddDocumentDialog />
@@ -26,16 +29,14 @@ export function DocumentsManager(props: Props) {
       <div className="my-4 flex items-center justify-between">
         <p className="text-xs text-muted-foreground font-semibold tracking-wider">DOCUMENT LIST</p>
 
-        <EllipsisIcon size={16} className="cursor-pointer" />
+        <FilesIcon className="size-4 text-muted-foreground" />
       </div>
 
-      <Suspense fallback={<DecumentListSkeleton />}>
-        {props.searchParams.then((res) => {
-          const query = res.query as string | undefined;
-
-          return <DocumentList query={query} />;
-        })}
-      </Suspense>
+      <div className="flex-1 overflow-hidden min-h-0">
+        <Suspense fallback={<DocumentListSkeleton />}>
+          <DocumentList query={query} />
+        </Suspense>
+      </div>
     </aside>
   );
 }

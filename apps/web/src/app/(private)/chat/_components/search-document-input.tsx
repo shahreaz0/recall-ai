@@ -1,43 +1,70 @@
 "use client";
 
-import { Loader2, SearchIcon } from "lucide-react";
-
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@recall-ai/ui/components/input-group";
+import { Loader2, SearchIcon, XIcon } from "lucide-react";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@recall-ai/ui/components/input-group";
 import { useEffect, useState, useTransition } from "react";
 import { useDebounce } from "@recall-ai/ui/hooks/use-debounce";
 import { useRouter, useSearchParams } from "next/navigation";
 
 export function SearchDocumentInput() {
-  const [isPending, startTransition] = useTransition();
-  const [query, setQuery] = useState("");
-
-  const debouncedQuery = useDebounce(query, 500);
-
   const router = useRouter();
   const searchParams = useSearchParams();
+  const initialValue = searchParams.get("query") ?? "";
+
+  const [isPending, startTransition] = useTransition();
+  const [query, setQuery] = useState(initialValue);
+
+  const debouncedQuery = useDebounce(query, 400);
 
   useEffect(() => {
-    const params = new URLSearchParams(searchParams);
-    if (debouncedQuery) {
-      params.set("query", debouncedQuery);
+    const currentParam = searchParams.get("query") ?? "";
+    if (debouncedQuery === currentParam) return;
+
+    const params = new URLSearchParams(searchParams.toString());
+    if (debouncedQuery.trim()) {
+      params.set("query", debouncedQuery.trim());
     } else {
       params.delete("query");
     }
+
     startTransition(() => {
-      router.push(`?${params.toString()}`);
+      const queryString = params.toString();
+      router.push(queryString ? `?${queryString}` : "/chat");
     });
-  }, [debouncedQuery]);
+  }, [debouncedQuery, router, searchParams]);
 
   return (
     <InputGroup className="w-full">
+      <InputGroupAddon align="inline-start">
+        <SearchIcon className="size-4 text-muted-foreground" />
+      </InputGroupAddon>
       <InputGroupInput
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search documents..."
       />
-      <InputGroupAddon>
-        {isPending ? <Loader2 className="animate-spin" /> : <SearchIcon />}
-      </InputGroupAddon>
+      {(isPending || query) && (
+        <InputGroupAddon align="inline-end">
+          {isPending ? (
+            <Loader2 className="size-3.5 animate-spin text-muted-foreground" />
+          ) : (
+            <InputGroupButton
+              size="icon-xs"
+              variant="ghost"
+              onClick={() => setQuery("")}
+              title="Clear search"
+              className="text-muted-foreground hover:text-foreground"
+            >
+              <XIcon className="size-3.5" />
+            </InputGroupButton>
+          )}
+        </InputGroupAddon>
+      )}
     </InputGroup>
   );
 }
