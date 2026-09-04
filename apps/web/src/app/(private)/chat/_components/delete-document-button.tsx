@@ -4,7 +4,7 @@ import * as React from "react";
 import { Loader2, TrashIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@recall-ai/ui/components/button";
-import { deleteDocument } from "../_chat-actions";
+import { deleteDocument } from "../_actions/documents";
 
 type DeleteDocumentButtonProps = {
   documentId: string;

@@ -9,7 +9,7 @@ import {
   ItemTitle,
 } from "@recall-ai/ui/components/item";
 import { Skeleton } from "@recall-ai/ui/components/skeleton";
-import { getConversationsList } from "../_chat-actions";
+import { getConversationsList } from "../_actions/conversations";
 import { DeleteConversationButton } from "./delete-conversation-button";
 import { NewChatButton } from "./new-chat-button";
 import { cn } from "@recall-ai/ui/lib/utils";
@@ -67,7 +67,7 @@ export async function ConversationList({ query, activeConversationId }: Props) {
           <MessagesSquare className="size-6" />
         </div>
         <p className="text-sm font-medium">No conversations yet</p>
-        <p className="text-xs text-muted-foreground mt-1 mb-4 max-w-[200px]">
+        <p className="text-xs text-muted-foreground mt-1 mb-4 max-w-50">
           Start a new chat to ask questions and explore your indexed documents.
         </p>
         <NewChatButton size="sm" />

@@ -1,4 +1,4 @@
-import { semanticSearchDocument } from "@/app/(private)/chat/_chat-actions";
+import { semanticSearchDocument } from "@/app/(private)/chat/_actions/documents";
 import { openrouter } from "@/lib/openrouter";
 // import { webSearch } from "@exalabs/ai-sdk";
 // import { env } from "@recall-ai/env/server";

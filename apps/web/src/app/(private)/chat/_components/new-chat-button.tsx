@@ -4,7 +4,7 @@ import * as React from "react";
 import { Loader2, PlusIcon } from "lucide-react";
 import { Button } from "@recall-ai/ui/components/button";
 import { useRouter } from "next/navigation";
-import { createConversation } from "../_chat-actions";
+import { createConversation } from "../_actions/conversations";
 import { toast } from "sonner";
 
 type NewChatButtonProps = {

@@ -10,7 +10,7 @@ import {
 } from "@recall-ai/ui/components/item";
 import { Skeleton } from "@recall-ai/ui/components/skeleton";
 import { Button } from "@recall-ai/ui/components/button";
-import { getDocumentList } from "../_chat-actions";
+import { getDocumentList } from "../_actions/documents";
 import { DeleteDocumentButton } from "./delete-document-button";
 import { AddDocumentDialog } from "./add-document-dialog";
 

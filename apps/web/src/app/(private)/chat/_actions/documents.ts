@@ -1,28 +1,24 @@
 "use server";
-import { generateEmbedding, generateEmbeddings } from "@/lib/embeddings";
 
 import { splitText } from "@/lib/chunking";
+import { generateEmbedding, generateEmbeddings } from "@/lib/embeddings";
 import { auth } from "@recall-ai/auth";
-import { headers } from "next/headers";
-
-import { extractText } from "unpdf";
 import {
   and,
   cosineDistance,
-  conversations,
   db,
   desc,
   documentChunks,
   documents,
   eq,
   gt,
-  ilike,
-  messages,
   sql,
 } from "@recall-ai/db";
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
+import { extractText } from "unpdf";
 
-type CreateDocumentValues = {
+export type CreateDocumentValues = {
   title: string;
   description?: string | undefined;
   file: File;
@@ -50,7 +46,6 @@ export async function createDocument(formValues: CreateDocumentValues) {
     }
 
     const chunks = await splitText(text);
-
     const embeddings = await generateEmbeddings(chunks);
 
     const res = await db.transaction(async (tx) => {
@@ -71,14 +66,12 @@ export async function createDocument(formValues: CreateDocumentValues) {
         };
       }
 
-      const documentChunksRecords = chunks.map((chunk, index) => {
-        return {
-          content: chunk,
-          embedding: embeddings[index],
-          chunkIndex: index,
-          documentId: document.id,
-        };
-      });
+      const documentChunksRecords = chunks.map((chunk, index) => ({
+        content: chunk,
+        embedding: embeddings[index],
+        chunkIndex: index,
+        documentId: document.id,
+      }));
 
       await tx.insert(documentChunks).values(documentChunksRecords);
 
@@ -109,29 +102,32 @@ export async function deleteDocument(documentId: string) {
     }
 
     revalidatePath("/chat");
-
     return { success: true, id: deletedRecord.id };
   } catch (error) {
     return { error: (error as Error).message, success: false };
   }
 }
 
-export async function getDocumentList({ query }: { query?: string }) {
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (!session?.user) {
-    return { error: "Unauthorized", success: false, documents: [] };
-  }
+export async function getDocumentList({ query }: { query?: string } = {}) {
+  try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (!session?.user) {
+      return { error: "Unauthorized", success: false, documents: [] };
+    }
 
-  const docs = await db.query.documents.findMany({
-    where: {
-      userId: session.user.id,
-      title: {
-        ilike: query ? `%${query}%` : "%",
+    const docs = await db.query.documents.findMany({
+      where: {
+        userId: session.user.id,
+        title: {
+          ilike: query ? `%${query}%` : "%",
+        },
       },
-    },
-  });
+    });
 
-  return { success: true, documents: docs };
+    return { success: true, documents: docs };
+  } catch (error) {
+    return { error: (error as Error).message, success: false, documents: [] };
+  }
 }
 
 export async function semanticSearchDocument({
@@ -151,8 +147,6 @@ export async function semanticSearchDocument({
 
     const embedding = await generateEmbedding(query);
 
-    console.log(embedding);
-
     const similarity = sql<number>`1 - (${cosineDistance(documentChunks.embedding, embedding)})`;
 
     const similarDocs = await db
@@ -168,16 +162,6 @@ export async function semanticSearchDocument({
       .orderBy((t) => desc(t.similarity))
       .limit(limit);
 
-    console.log(similarDocs);
-
-    // const docs = await db.query.documentChunks.findMany({
-    //   where: {
-    //     embedding: { l2Distance: { lte: threshold } },
-    //     documentId: { in: session.user.id },
-    //   },
-    //   limit,
-    // });
-
     return {
       success: true,
       documents: similarDocs,
@@ -188,81 +172,5 @@ export async function semanticSearchDocument({
       success: false,
       documents: [],
     };
-  }
-}
-
-export async function getConversationsList({ query }: { query?: string } = {}) {
-  try {
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session?.user) {
-      return { error: "Unauthorized", success: false, conversations: [] };
-    }
-
-    const convs = await db
-      .select()
-      .from(conversations)
-      .where(
-        and(
-          eq(conversations.userId, session.user.id),
-          query ? ilike(conversations.title, `%${query}%`) : undefined,
-        ),
-      )
-      .orderBy(desc(conversations.updatedAt));
-
-    return { success: true, conversations: convs };
-  } catch (error) {
-    return {
-      error: (error as Error).message,
-      success: false,
-      conversations: [],
-    };
-  }
-}
-
-export async function createConversation({ title }: { title?: string } = {}) {
-  try {
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session?.user) {
-      return { error: "Unauthorized", success: false };
-    }
-
-    const [newConv] = await db
-      .insert(conversations)
-      .values({
-        userId: session.user.id,
-        title: title?.trim() || "New Chat",
-      })
-      .returning();
-
-    revalidatePath("/chat");
-    return { success: true, conversation: newConv };
-  } catch (error) {
-    return { error: (error as Error).message, success: false };
-  }
-}
-
-export async function deleteConversation(conversationId: string) {
-  try {
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session?.user) {
-      return { error: "Unauthorized", success: false };
-    }
-
-    const [deletedRecord] = await db.transaction(async (tx) => {
-      await tx.delete(messages).where(eq(messages.conversationId, conversationId));
-      return await tx
-        .delete(conversations)
-        .where(and(eq(conversations.id, conversationId), eq(conversations.userId, session.user.id)))
-        .returning();
-    });
-
-    if (!deletedRecord) {
-      return { error: "Conversation not found or unauthorized", success: false };
-    }
-
-    revalidatePath("/chat");
-    return { success: true, id: deletedRecord.id };
-  } catch (error) {
-    return { error: (error as Error).message, success: false };
   }
 }

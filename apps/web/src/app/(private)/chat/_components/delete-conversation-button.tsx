@@ -4,7 +4,7 @@ import * as React from "react";
 import { Loader2, TrashIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@recall-ai/ui/components/button";
-import { deleteConversation } from "../_chat-actions";
+import { deleteConversation } from "../_actions/conversations";
 import { useRouter, useSearchParams } from "next/navigation";
 
 type DeleteConversationButtonProps = {
