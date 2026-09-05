@@ -45,12 +45,14 @@ export async function POST(request: Request) {
     model: openrouter.chat(model),
     messages: formettedMessages,
     tools,
+    reasoning: "medium",
     stopWhen: stepCountIs(3),
   });
 
   return createUIMessageStreamResponse({
     stream: toUIMessageStream({
       stream: res.stream,
+      sendReasoning: true,
     }),
   });
 }
